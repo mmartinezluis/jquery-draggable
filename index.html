@@ -37,14 +37,24 @@
         </div>
     </div>
     <script>
-        // $('.container').droppable({
-
-        // });
+        $('.container').droppable({
+            accept: '.drag',
+            drop: function(event, ui) {
+                console.log(ui)
+                // ui.draggable.remove();
+            },
+        });
         $('.slot').droppable({
-
+            accept: '.drag',
+            drop: function(event, ui) {
+                console.log(ui)
+            },
         });
         $('.container .drag').draggable({
-            revert: 'invalid'
+            revert: 'invalid',
+            cursor: 'move',
+            containment: 'document',
+            // helper: 'clone'
         })
     </script>
 </body>

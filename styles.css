@@ -31,13 +31,12 @@
 .slot {
     position: relative;
     border: orange dashed 3px;
+    z-index: -10;
 }
-
 .pair {
     display: grid;
     grid-template-columns: 1fr;
 }
-
 .pair div {
     grid-row-start: 1;
     grid-column-start: 1;
