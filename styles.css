@@ -1,6 +1,9 @@
 .main {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 50px;
+    row-gap: 40px;
 }
 #numbers, 
 #alphabet {
@@ -8,16 +11,22 @@
     flex-direction: column;
     row-gap: 20px;
     padding: 10px;
-    border: 5px blue solid; 
-    max-width: 500px; 
-    margin: 0 auto;
-    
+    border: 2px solid; 
+    min-width: 300px; 
+    text-align: center;
 }
 
 :is(#numbers, #alphabet) div {
     display: flex;
     height: 50px;
-    border: solid black 3px;
     justify-content: center;
     align-items: center;
+}
+
+#numbers div {
+    border: solid gray 3px;
+}
+
+#alphabet div {
+    border: solid red 3px;
 }
