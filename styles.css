@@ -5,28 +5,40 @@
     column-gap: 50px;
     row-gap: 40px;
 }
-#numbers, 
-#alphabet {
+.container {
     display: flex;
     flex-direction: column;
+    align-items: center;
     row-gap: 20px;
     padding: 10px;
     border: 2px solid; 
     min-width: 300px; 
     text-align: center;
 }
-
-:is(#numbers, #alphabet) div {
+.container :is(.drag, .slot) {
     display: flex;
     height: 50px;
+    min-width: 150px;
     justify-content: center;
     align-items: center;
 }
-
-#numbers div {
+#numbers .drag {
     border: solid gray 3px;
 }
-
-#alphabet div {
+#alphabet .drag {
     border: solid red 3px;
+}
+.slot {
+    position: relative;
+    border: orange dashed 3px;
+}
+
+.pair {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.pair div {
+    grid-row-start: 1;
+    grid-column-start: 1;
 }
