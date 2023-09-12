@@ -37,11 +37,23 @@
         </div>
     </div>
     <script>
-        $('.container').droppable({
+        $('#alphabet').droppable({
             accept: '.drag',
             drop: function(event, ui) {
                 console.log(ui)
                 // ui.draggable.remove();
+               const el = ui.draggable
+                    .remove()
+                    .draggable({
+                        revert: 'invalid',
+                        cursor: 'move',
+                        containment: 'document'
+                    })
+                    .removeAttr('style')
+                    .attr('style', 'position: relative;')
+                    .addClass('ui-draggable-handle')
+                    .appendTo('#alphabet')
+                    console.log(el)
             },
         });
         $('.slot').droppable({
