@@ -11,18 +11,29 @@
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js" integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY=" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div id="main">
-        <h1>Hello</h1>
-        <div id="one"><span>ONE</span></div>
-        <div id="two">TWO</div>
-        <div id="three"><span>THREE</span></div>
-        <div id="four"><span>FOUR</span></div>
-        <div id="five"><span>FIVE</span></div>
+    <div class="main">
+        <div id="numbers">
+            <h1>Numbers</h1>
+            <div id="one"><span>ONE</span></div>
+            <div id="two">TWO</div>
+            <div id="three"><span>THREE</span></div>
+            <div id="four"><span>FOUR</span></div>
+            <div id="five"><span>FIVE</span></div>
+        </div>
+        <div id="alphabet">
+            <h1>Alphabet</h1>
+            <div id="a"><span>A</span></div>
+            <div id="b">B</div>
+            <div id="c"><span>C</span></div>
+            <div id="d"><span>D</span></div>
+            <div id="e"><span>E</span></div>
+        </div>
     </div>
     <script>
-        $('#main').draggable({
+        $('#numbers').draggable({
 
         });
+        $('#numbers div').draggable()
     </script>
 </body>
 </html>

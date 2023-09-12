@@ -1,4 +1,9 @@
-#main {
+.main {
+    display: flex;
+    flex-wrap: wrap;
+}
+#numbers, 
+#alphabet {
     display: flex;
     flex-direction: column;
     row-gap: 20px;
@@ -9,9 +14,10 @@
     
 }
 
-#main div {
+:is(#numbers, #alphabet) div {
+    display: flex;
     height: 50px;
     border: solid black 3px;
-    align-content: center;
     justify-content: center;
+    align-items: center;
 }
