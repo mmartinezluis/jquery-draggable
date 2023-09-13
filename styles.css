@@ -22,10 +22,10 @@
     justify-content: center;
     align-items: center;
 }
-#numbers .drag {
+#container-0 .drag {
     border: solid gray 3px;
 }
-#alphabet .drag {
+#container-1 .drag {
     border: solid red 3px;
 }
 .slot {

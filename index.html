@@ -12,50 +12,50 @@
 </head>
 <body>
     <div class="main">
-        <div class="container" id="numbers">
+        <div class="container" id="container-0">
             <h1>Numbers</h1>
             <div class="pair">
                 <div class="slot"></div>
-                <div class="drag" id="one"><span>ONE</span></div>
+                <div class="drag" id="item-00"><span>ONE</span></div>
             </div>
             <div class="pair">
                 <div class="slot"></div>
-                <div class="drag" id="two"><span>TWO</span></div>
+                <div class="drag" id="item-01"><span>TWO</span></div>
             </div>
             <div class="pair">
                 <div class="slot"></div>
-                <div class="drag" id="three"><span>THREE</span></div>
+                <div class="drag" id="item-02"><span>THREE</span></div>
             </div>
             <div class="pair">
                 <div class="slot"></div>
-                <div class="drag" id="four"><span>FOUR</span></div>
+                <div class="drag" id="item-03"><span>FOUR</span></div>
             </div>
             <div class="pair">
                 <div class="slot"></div>
-                <div class="drag" id="five"><span>FIVE</span></div>
+                <div class="drag" id="item-04"><span>FIVE</span></div>
             </div>
         </div>
-        <div class="container" id="alphabet">
+        <div class="container" id="container-1">
             <h1>Alphabet</h1>
             <div class="pair">
                 <div class="slot"></div>
-                <div class="drag" id="a"><span>A</span></div>
+                <div class="drag" id="item-10"><span>A</span></div>
             </div>
             <div class="pair">
                 <div class="slot"></div>
-                <div class="drag" id="b"><span>B</span></div>
+                <div class="drag" id="item-11"><span>B</span></div>
             </div>
             <div class="pair">
                 <div class="slot"></div>
-                <div class="drag" id="c"><span>C</span></div>
+                <div class="drag" id="item-12"><span>C</span></div>
             </div>
             <div class="pair">
                 <div class="slot"></div>
-                <div class="drag" id="d"><span>D</span></div>
+                <div class="drag" id="item-13"><span>D</span></div>
             </div>
             <div class="pair">
                 <div class="slot"></div>
-                <div class="drag" id="e"><span>E</span></div>
+                <div class="drag" id="item-14"><span>E</span></div>
             </div>
         </div>
     </div>
@@ -68,7 +68,8 @@
         const draggableConfig = {
             revert: 'invalid',
             cursor: 'move',
-            containment: 'document',   
+            containment: 'document', 
+            snapMode: 'inner',  
             start: onDemandDraggableCallback,
             stop: dragStopCallback,
         }
@@ -106,23 +107,26 @@
 
         function dragStopCallback(event, ui) {
             const parentSlot = ui.helper.parent();
-            draggableId = ui.helper.attr('id');
+            const draggableId = ui.helper.attr('id').split('-')[1];
+            let originalContainerPairs = $("#container-" + draggableId[0] + " .pair");
             // You were dropped in a slot within your parent container
             if(parentSlot.length) {
-
+                console.log("The parent length")
             } else {
-                const expression = /[abcde]/;
-                let containerPairs;
-                if(expression.test(draggableId)) {
-                    containerPairs = $('#alphabet .pair');
-                } else {
-                    containerPairs = $('#numbers .pair');
-                }
-                containerPairs.each((i, pair) => {
+                console.log('Across containers')
+                // debugger
+                originalContainerPairs.each((i, pair) => {
                     const $pair = $(pair);
                     if($pair.children().length < 2) $pair.remove();
                 })
             }
+            // debugger
+            const $currentItem = $("#item-" + draggableId);
+            const $droppedContainer = $currentItem.parents('.container');
+            // debugger
+            const newId = "item-" + $droppedContainer.attr('id').split('-')[1][0] + ($droppedContainer.find('.pair').length -1);
+            // debugger
+            $currentItem.attr('id', newId);
         }
 
         function _pair(draggable) {
