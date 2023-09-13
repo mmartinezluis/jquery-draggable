@@ -29,45 +29,85 @@
                 <div class="slot"></div>
                 <div class="drag" id="a"><span>A</span></div>
             </div>
-            
-            <div class="drag" id="b"><span>B</span></div>
-            <div class="drag" id="c"><span>C</span></div>
-            <div class="drag" id="d"><span>D</span></div>
-            <div class="drag" id="e"><span>E</span></div>
+            <div class="pair">
+                <div class="slot"></div>
+                <div class="drag" id="b"><span>B</span></div>
+            </div>
+            <div class="pair">
+                <div class="slot"></div>
+                <div class="drag" id="c"><span>C</span></div>
+            </div>
+            <div class="pair">
+                <div class="slot"></div>
+                <div class="drag" id="d"><span>D</span></div>
+            </div>
+            <div class="pair">
+                <div class="slot"></div>
+                <div class="drag" id="e"><span>E</span></div>
+            </div>
         </div>
     </div>
     <script>
-        $('#alphabet').droppable({
-            accept: '.drag',
-            drop: function(event, ui) {
-                console.log(ui)
-                // ui.draggable.remove();
-               const el = ui.draggable
-                    .remove()
-                    .draggable({
-                        revert: 'invalid',
-                        cursor: 'move',
-                        containment: 'document'
-                    })
-                    .removeAttr('style')
-                    .attr('style', 'position: relative;')
-                    .addClass('ui-draggable-handle')
-                    .appendTo('#alphabet')
-                    console.log(el)
-            },
-        });
+        // $('#alphabet').droppable({
+        //     accept: '.drag',
+        //     drop: function(event, ui) {
+        //         console.log(ui)
+        //         const clone = ui.draggable.clone();
+        //         ui.draggable
+        //             .remove()
+        //         clone
+        //             .draggable({
+        //                 revert: 'invalid',
+        //                 cursor: 'move',
+        //                 containment: 'document'
+        //             })
+        //             .removeAttr('style')
+        //             .css('position', 'relative')
+        //             .appendTo('#alphabet')
+        //             console.log(el)
+        //     },
+        // });
         $('.slot').droppable({
             accept: '.drag',
             drop: function(event, ui) {
-                console.log(ui)
+                // console.log(ui)
             },
         });
         $('.container .drag').draggable({
             revert: 'invalid',
             cursor: 'move',
-            containment: 'document',
+            containment: 'document',            
+            start: function(event, ui) {
+                // console.log(ui.helper)
+                const el = ui.helper;
+                const currentContainer = (el.parent().parent())[0];
+                $('.container').each((i, container) => {
+                    if(container !== currentContainer) {
+                        // console.log(container)
+                        const jcontainer = $(container)
+                        jcontainer.droppable({
+                            drop: droppableOnDemand
+                        })
+                    }
+                });
+            },
             // helper: 'clone'
         })
+
+        function droppableOnDemand(event, ui) {
+            // console.log(ui)
+            const original = ui.draggable
+            const clone = original.clone();
+            original.remove();
+            clone.draggable({
+                revert: 'invalid',
+                cursor: 'move',
+                containment: 'document'
+            }).removeAttr('style')
+              .css('position', 'relative')
+              .appendTo(event.target)
+            console.log(event)
+        }
     </script>
 </body>
 </html>
