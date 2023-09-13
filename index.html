@@ -60,57 +60,80 @@
         </div>
     </div>
     <script>
+        const droppableConfig = {
+            accept: '.drag',
+            drop: onDemandDroppableCallback,
+        }
+
+        const draggableConfig = {
+            revert: 'invalid',
+            cursor: 'move',
+            containment: 'document',   
+            start: onDemandDraggableCallback,
+            stop: dragStopCallback,
+        }
+
         $('.slot').droppable({
             accept: '.drag',
         });
-        $('.container .drag').draggable({
-            revert: 'invalid',
-            cursor: 'move',
-            containment: 'document',            
-            start: function(event, ui) {
-                const el = ui.helper;
-                const parentContainer = (el.parent().parent())[0];
-                $('.container').each((i, container) => {
-                    const jcontainer = $(container)
-                    if(container !== parentContainer) {
-                        if(jcontainer.attr('class').includes("ui-droppable-disabled")) {
-                            jcontainer.droppable('enable');
-                        } else {
-                            jcontainer.droppable({
-                                accept: '.drag',
-                                drop: containerDroppableCallback
-                            })
-                        }
-                    } else if(container === parentContainer) {
-                        if(jcontainer.attr('class').includes("ui-droppable")) {
-                            jcontainer.droppable('disable')
-                        }
-                    }
-                });
-            },
-            // helper: 'clone'
-        })
+        $('.container .drag').draggable(draggableConfig)
 
-        function containerDroppableCallback(event, ui) {
+        function onDemandDroppableCallback(event, ui) {
             const original = ui.draggable
             const clone = original.clone();
-            console.log(clone)
             original.remove();
-            clone.draggable({
-                revert: 'invalid',
-                cursor: 'move',
-                containment: 'document'
-            }).removeAttr('style')
+            clone
+              .removeAttr('style')
+              .removeClass('ui-draggable ui-draggable-handle ui-draggable-dragging')
               .css('position', 'relative')
+            clone.draggable(draggableConfig)
             event.target.append(_pair((clone)))
+        }
+
+        function onDemandDraggableCallback(event, ui) {
+            const el = ui.helper;
+            const parentContainer = (el.parent().parent())[0];
+            $('.container').each((i, container) => {
+                const jcontainer = $(container)
+                if(container === parentContainer) {
+                    console.log('AT THE PARENT')
+                    if(isDroppable(jcontainer)) jcontainer.droppable('destroy');
+                } else {
+                    if(!isDroppable(jcontainer)) jcontainer.droppable(droppableConfig);
+                }
+            });
+        }
+
+        function dragStopCallback(event, ui) {
+            const parentSlot = ui.helper.parent();
+            draggableId = ui.helper.attr('id');
+            // You were dropped in a slot within your parent container
+            if(parentSlot.length) {
+
+            } else {
+                const expression = /[abcde]/;
+                let containerPairs;
+                if(expression.test(draggableId)) {
+                    containerPairs = $('#alphabet .pair');
+                } else {
+                    containerPairs = $('#numbers .pair');
+                }
+                containerPairs.each((i, pair) => {
+                    const $pair = $(pair);
+                    if($pair.children().length < 2) $pair.remove();
+                })
+            }
         }
 
         function _pair(draggable) {
             const $pair = $('<div>', {"class": "pair"});
-            $pair.append($('<div>', {"class": "slot"}));
+            const $slot = $('<div>', {"class": "slot"}).droppable({accept: '.drag'})
+            $pair.append($slot);
             $pair.append(draggable);
             return $pair[0];
         }
+
+        const isDroppable = (el) => el.attr('class').includes("ui-droppable");
     </script>
 </body>
 </html>
