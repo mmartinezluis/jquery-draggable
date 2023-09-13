@@ -18,10 +18,22 @@
                 <div class="slot"></div>
                 <div class="drag" id="one"><span>ONE</span></div>
             </div>
-            <div class="drag" id="two"><span>TWO</span></div>
-            <div class="drag" id="three"><span>THREE</span></div>
-            <div class="drag" id="four"><span>FOUR</span></div>
-            <div class="drag" id="five"><span>FIVE</span></div>
+            <div class="pair">
+                <div class="slot"></div>
+                <div class="drag" id="two"><span>TWO</span></div>
+            </div>
+            <div class="pair">
+                <div class="slot"></div>
+                <div class="drag" id="three"><span>THREE</span></div>
+            </div>
+            <div class="pair">
+                <div class="slot"></div>
+                <div class="drag" id="four"><span>FOUR</span></div>
+            </div>
+            <div class="pair">
+                <div class="slot"></div>
+                <div class="drag" id="five"><span>FIVE</span></div>
+            </div>
         </div>
         <div class="container" id="alphabet">
             <h1>Alphabet</h1>
@@ -48,56 +60,41 @@
         </div>
     </div>
     <script>
-        // $('#alphabet').droppable({
-        //     accept: '.drag',
-        //     drop: function(event, ui) {
-        //         console.log(ui)
-        //         const clone = ui.draggable.clone();
-        //         ui.draggable
-        //             .remove()
-        //         clone
-        //             .draggable({
-        //                 revert: 'invalid',
-        //                 cursor: 'move',
-        //                 containment: 'document'
-        //             })
-        //             .removeAttr('style')
-        //             .css('position', 'relative')
-        //             .appendTo('#alphabet')
-        //             console.log(el)
-        //     },
-        // });
         $('.slot').droppable({
             accept: '.drag',
-            drop: function(event, ui) {
-                // console.log(ui)
-            },
         });
         $('.container .drag').draggable({
             revert: 'invalid',
             cursor: 'move',
             containment: 'document',            
             start: function(event, ui) {
-                // console.log(ui.helper)
                 const el = ui.helper;
-                const currentContainer = (el.parent().parent())[0];
+                const parentContainer = (el.parent().parent())[0];
                 $('.container').each((i, container) => {
-                    if(container !== currentContainer) {
-                        // console.log(container)
-                        const jcontainer = $(container)
-                        jcontainer.droppable({
-                            drop: droppableOnDemand
-                        })
+                    const jcontainer = $(container)
+                    if(container !== parentContainer) {
+                        if(jcontainer.attr('class').includes("ui-droppable-disabled")) {
+                            jcontainer.droppable('enable');
+                        } else {
+                            jcontainer.droppable({
+                                accept: '.drag',
+                                drop: containerDroppableCallback
+                            })
+                        }
+                    } else if(container === parentContainer) {
+                        if(jcontainer.attr('class').includes("ui-droppable")) {
+                            jcontainer.droppable('disable')
+                        }
                     }
                 });
             },
             // helper: 'clone'
         })
 
-        function droppableOnDemand(event, ui) {
-            // console.log(ui)
+        function containerDroppableCallback(event, ui) {
             const original = ui.draggable
             const clone = original.clone();
+            console.log(clone)
             original.remove();
             clone.draggable({
                 revert: 'invalid',
@@ -105,8 +102,14 @@
                 containment: 'document'
             }).removeAttr('style')
               .css('position', 'relative')
-              .appendTo(event.target)
-            console.log(event)
+            event.target.append(_pair((clone)))
+        }
+
+        function _pair(draggable) {
+            const $pair = $('<div>', {"class": "pair"});
+            $pair.append($('<div>', {"class": "slot"}));
+            $pair.append(draggable);
+            return $pair[0];
         }
     </script>
 </body>
