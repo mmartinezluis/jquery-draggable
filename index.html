@@ -69,14 +69,25 @@
             revert: 'invalid',
             cursor: 'move',
             containment: 'document', 
+            snap: true,
             snapMode: 'inner',  
+            // snapTolerance: 60,
+            opacity: 0.35,
+            zIndex: 100,
             start: onDemandDraggableCallback,
             stop: dragStopCallback,
+            // helper: (el) => $(el.currentTarget).clone(),
         }
 
-        $('.slot').droppable({
+        const slotDroppableConfig = {
             accept: '.drag',
-        });
+            // tolerance: 'pointer',
+            // tolerance: 'fit',
+            drop: slotDroppableCallback,
+        }
+
+        $('.slot').droppable(slotDroppableConfig);
+
         $('.container .drag').draggable(draggableConfig)
 
         function onDemandDroppableCallback(event, ui) {
@@ -97,12 +108,15 @@
             $('.container').each((i, container) => {
                 const jcontainer = $(container)
                 if(container === parentContainer) {
-                    console.log('AT THE PARENT')
                     if(isDroppable(jcontainer)) jcontainer.droppable('destroy');
                 } else {
                     if(!isDroppable(jcontainer)) jcontainer.droppable(droppableConfig);
                 }
             });
+        }
+
+        function slotDroppableCallback(event, ui) {
+            rollOver(ui.draggable, $(this))
         }
 
         function dragStopCallback(event, ui) {
@@ -112,21 +126,16 @@
             // You were dropped in a slot within your parent container
             if(parentSlot.length) {
                 console.log("The parent length")
+                // debugger
+                console.log('DRAGGABLE HOVER', $('.ui-draggable-hover'))
             } else {
                 console.log('Across containers')
-                // debugger
                 originalContainerPairs.each((i, pair) => {
                     const $pair = $(pair);
                     if($pair.children().length < 2) $pair.remove();
                 })
+                updateId(draggableId);
             }
-            // debugger
-            const $currentItem = $("#item-" + draggableId);
-            const $droppedContainer = $currentItem.parents('.container');
-            // debugger
-            const newId = "item-" + $droppedContainer.attr('id').split('-')[1][0] + ($droppedContainer.find('.pair').length -1);
-            // debugger
-            $currentItem.attr('id', newId);
         }
 
         function _pair(draggable) {
@@ -137,7 +146,38 @@
             return $pair[0];
         }
 
+        function rollOver(draggable, dropoffSlot) {
+            const $originalSlot = draggable.prev('.slot');
+            const $containerPairs = dropoffSlot.parents('.container').find('.pair');
+
+            let initalPosition, finalPosition, rollOverIndex;
+
+            initalPosition = $containerPairs.index($originalSlot.parent());
+            finalPosition = $containerPairs.index(dropoffSlot.parent());
+            rollOverIndex = initalPosition - finalPosition;
+            // console.log(initalPosition, finalPosition)
+            if(rollOverIndex === 0 || 
+               // Item is coming from another container 
+              (dropoffSlot.parents('.container').attr('id') !== $originalSlot.parents('.container').attr('id'))
+            ) return;
+
+            draggable.css('left', '0px').css('top', '0px');
+
+            if(rollOverIndex > 0) {
+                $originalSlot.parent().insertBefore(dropoffSlot.parent());
+            } else {
+                $originalSlot.parent().insertAfter(dropoffSlot.parent());
+            }
+        }
+
         const isDroppable = (el) => el.attr('class').includes("ui-droppable");
+
+        const updateId = (draggableId) => {
+            const $currentItem = $("#item-" + draggableId);
+            const $droppedContainer = $currentItem.parents('.container');
+            const newId = "item-" + $droppedContainer.attr('id').split('-')[1][0] + ($droppedContainer.find('.pair').length -1);
+            $currentItem.attr('id', newId);
+        }
     </script>
 </body>
 </html>
