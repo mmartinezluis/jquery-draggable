@@ -90,6 +90,8 @@
 
         $('.container .drag').draggable(draggableConfig)
 
+        $('.container').droppable(droppableConfig);
+
         function onDemandDroppableCallback(event, ui) {
             const original = ui.draggable
             const clone = original.clone();
