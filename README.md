@@ -16,6 +16,6 @@ git clone https://github.com/mmartinezluis/jquery-draggable.git
 cd jquery-draggable
 ```
 * Open a server to run the app. In VSCode, this can be done by clicking on the "Go Live" button located at the bottom right.
-* Play dragging and ropping with the item blocks
+* Play dragging and dropping with the item blocks
 
 
