@@ -4,7 +4,7 @@
 Create two containers with items. Make the items to be draggable and droppable between the containers and within the containers themselves
 
 ## Languages and tools
-The problem was solved using HTML, CSS, and jQuery, and the jQuery-ui draggabale module.
+The problem was solved using HTML, CSS, jQuery, and the jQuery-ui draggabale module.
 
 ![Aplication demo](https://github.com/mmartinezluis/jquery-draggable/assets/75151961/cbf85dab-7d4f-4dbe-8b37-71f25a56ff67)
 
